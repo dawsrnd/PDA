@@ -1,0 +1,60 @@
+﻿<%@ Master Language="C#" AutoEventWireup="true" CodeBehind="Site.master.cs" Inherits="PDA.Site" %>
+
+<!DOCTYPE html>
+
+
+<html lang="es">
+<head runat="server">
+
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+    <meta content="ie=edge" />
+    <!--CSS-->
+    <link rel="shortcut icon" type="image/x-icon" href="<%= ResolveUrl("~/favicon.ico") %>" />
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.11.2/css/all.css" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" />
+    <link href="https://fonts.googleapis.com/css2?family=Roboto&display=swap" rel="stylesheet" />
+    <link href="<%=  ResolveUrl("~/css/Style.css") %>" rel="stylesheet" />
+    <link href="<%=  ResolveUrl("~/css/toast.css") %>" rel="stylesheet" />
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/mdb-ui-kit/3.6.0/mdb.min.css?parameters=1" rel="stylesheet" />
+    <title>Reportes</title>
+    <link href="<%=  ResolveUrl("~/css/spinkit.min.css") %>" rel="stylesheet" />
+    <asp:ContentPlaceHolder ID="head" runat="server">
+    </asp:ContentPlaceHolder>
+</head>
+<body>
+    <form id="form1" runat="server" autocomplete="off">
+        <nav class="navbar navbar-expand-lg navbar-light bg-white shadow-0">
+            <div class="container-fluid">
+                <a class="navbar-brand" runat="server">
+                    <img src="~/src/svg/logo.svg" height="30" runat="server" />
+                </a>
+                <button class="navbar-toggler" type="button" data-mdb-toggle="collapse" data-mdb-target="#navbarButtonsExample" aria-controls="navbarButtonsExample" aria-expanded="false" aria-label="Toggle navigation">
+                    <i class="fas fa-bars"></i>
+                </button>
+                <div class="collapse navbar-collapse" id="navbarButtonsExample">
+                    <ul class="navbar-nav me-auto">
+                        <!-- Dropdown -->
+                        <li class="nav-item dropdown">
+                            <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" role="button" data-mdb-toggle="dropdown" aria-expanded="false">Reportes de asistencia</a>
+                            <ul class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
+                                <li>
+                                    <a href="~/Reportes/PerLine.aspx" runat="server" class="dropdown-item" >Reporte Por linea</a>
+                                </li>
+                                <li>
+                                     <a href="~/Reportes/PerOperator.aspx" runat="server" class="dropdown-item" >Reporte Por Operador</a>
+                                </li>
+                                <li>
+                                     <a href="~/Reportes/PerStation.aspx" runat="server" class="dropdown-item" >Reporte Por Estaci&oacute;n</a>
+                                </li>
+                            </ul>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </nav>
+        <asp:ContentPlaceHolder ID="ContentPlaceHolder1" runat="server">
+        </asp:ContentPlaceHolder>
+    </form>
+</body>
+</html>

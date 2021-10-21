@@ -1,0 +1,5 @@
+C:\Users\R&D Program\source\repos\PDA\database\bin\Debug\database.dll
+C:\Users\R&D Program\source\repos\PDA\database\bin\Debug\database.pdb
+C:\Users\R&D Program\source\repos\PDA\database\obj\Debug\database.csproj.CoreCompileInputs.cache
+C:\Users\R&D Program\source\repos\PDA\database\obj\Debug\database.dll
+C:\Users\R&D Program\source\repos\PDA\database\obj\Debug\database.pdb

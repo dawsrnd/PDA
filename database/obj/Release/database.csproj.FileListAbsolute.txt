@@ -1,0 +1,6 @@
+C:\Users\R&D Program\source\repos\PDA\database\bin\Release\database.dll
+C:\Users\R&D Program\source\repos\PDA\database\bin\Release\database.pdb
+C:\Users\R&D Program\source\repos\PDA\database\obj\Release\database.csproj.AssemblyReference.cache
+C:\Users\R&D Program\source\repos\PDA\database\obj\Release\database.csproj.CoreCompileInputs.cache
+C:\Users\R&D Program\source\repos\PDA\database\obj\Release\database.dll
+C:\Users\R&D Program\source\repos\PDA\database\obj\Release\database.pdb

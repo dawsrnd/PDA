@@ -1,0 +1,25 @@
+﻿body {
+    font-family: Arial;
+}
+
+select, input {
+    margin-top: 10px;
+}
+
+label {
+    font-size: 12px;
+}
+
+.container-240 {
+    max-width: 240px;
+    margin-left: 2px;
+    width: 232px;
+}
+
+tr {
+    height: 60px;
+}
+
+.font-small {
+    font-size: 10px;
+}

@@ -1,0 +1,147 @@
+﻿/* For 1366 Resolution */
+@media only screen and (min-width: 1030px) and (max-width: 1366px) {
+    .table-bom {
+        height: 340px;
+    }
+}
+
+@media only screen and (min-width: 1367px) and (max-width: 1920px) {
+    .table-bom {
+        height: 580px;
+    }
+}
+
+
+.font-sm {
+    font-size: 0.85em;
+}
+
+.blue-KL {
+    background-color: #233F92 !important;
+    color: white !important;
+}
+
+.grey-strong {
+    background-color: #ececec;
+    color: #4f4f4f;
+}
+
+.red-KL {
+    color: #EF2026;
+}
+
+.blue-KL:hover {
+    background-color: #11276b;
+    color: white;
+}
+
+#intro {
+    height: 100vh;
+    background-color: #ffffff;
+}
+
+#footer {
+    height: 2rem;
+    bottom: 0;
+    background-color: #ffffff;
+    width: 100%;
+}
+
+
+
+.green-Excel {
+    background-color: #0F783E !important;
+    color: white !important;
+}
+
+.table-small {
+    font-size: .75em;
+}
+
+
+
+body {
+    font-family: 'Roboto', sans-serif;
+    background-color: #f6f6f6 !important;
+}
+
+#map {
+    height: 100vh;
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: cover;
+}
+
+.leaflet-control-attribution {
+    display: none;
+}
+
+@media screen and (max-width: 600px) {
+    div.map {
+        height: 400px;
+    }
+}
+
+
+div.leaflet-control-zoom {
+    display: none;
+}
+
+
+.form-signin {
+    width: 100%;
+    max-width: 500px;
+    padding: 15px;
+    margin: auto;
+}
+
+
+
+.font-small-table {
+    font-size: 0.8rem;
+}
+
+.fontboldw {
+    font-weight: bold;
+}
+
+
+::-webkit-scrollbar {
+    width: 7px;
+    height: 7px;
+}
+
+::-webkit-scrollbar-track {
+    background: #f1f1f1;
+}
+
+::-webkit-scrollbar-thumb {
+    background: #cacaca;
+}
+
+    ::-webkit-scrollbar-thumb:hover {
+        background: #8f8f8f;
+    }
+
+
+
+.StickyHeader th {
+    position: sticky;
+    top: -1px;
+    border: 0px;
+    background-color: #f5f5f5;
+    color: #757575 !important
+}
+
+
+.myGrid th {
+    border: 0px;
+}
+
+.myGrid {
+    table-layout: fixed;
+}
+
+.table-wrapper-scroll-y {
+    display: block;
+}
