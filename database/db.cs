@@ -214,7 +214,7 @@ namespace Database
         }
 
 
-        public DataTable SP_READ_PERSONAL_ESCANEADO(string turno, int Planta, string from, string to)
+        public DataTable SP_READ_PERSONAL_ESCANEADO(string turno, int Planta, string from)
         {
             DataTable result = new DataTable();
             using (SqlCommand cmd = new SqlCommand("SP_READ_PERSONAL_ESCANEADO", cnn_db_daws))
@@ -222,7 +222,6 @@ namespace Database
                 cmd.Parameters.Add("@turno", SqlDbType.VarChar, 15).Value = turno;
                 cmd.Parameters.Add("@Planta", SqlDbType.Int).Value = Planta;
                 cmd.Parameters.Add("@from", SqlDbType.VarChar, 15).Value = from;
-                cmd.Parameters.Add("@to", SqlDbType.VarChar,15).Value = to;
                 cmd.CommandType = CommandType.StoredProcedure;
                 cmd.Connection = cnn_db_daws;
                 cnn_db_daws.Open();
@@ -233,7 +232,7 @@ namespace Database
         }
 
 
-        public DataTable SP_READ_PERSONAL_POR_LINEA(string IdLinea, string resultdate, string resultshift)
+        public DataTable SP_READ_PERSONAL_POR_LINEA(string IdLinea, string resultdate, string resultshift, string plant)
         {
             DataTable result = new DataTable();
             using (SqlCommand cmd = new SqlCommand("SP_READ_PERSONAL_POR_LINEA", cnn_db_daws))
@@ -241,6 +240,7 @@ namespace Database
                 cmd.Parameters.Add("@IdLinea", SqlDbType.Int).Value = IdLinea;
                 cmd.Parameters.Add("@resultdate", SqlDbType.VarChar,15).Value = resultdate;
                 cmd.Parameters.Add("@resultshift", SqlDbType.Int).Value = resultshift;
+                cmd.Parameters.Add("@plant", SqlDbType.Int).Value = plant;
                 cmd.CommandType = CommandType.StoredProcedure;
                 cmd.Connection = cnn_db_daws;
                 cnn_db_daws.Open();

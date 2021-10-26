@@ -26,6 +26,7 @@ namespace PDA
                 ddl_type_report.Items.Add(new ListItem("PERSONAL PRESTADO", "201"));
                 ddl_type_report.Items.Add(new ListItem("HEADCOUNT", "202"));
                 ddl_type_report.Items.Add(new ListItem("HISTORIAL ASISTENCIA", "203"));
+                ddl_type_report.Items.Add(new ListItem("BASE DE DATOS", "204"));
                 ddl_type_report.Items.Add(new ListItem("", "404"));
 
                 ddl_type_report.DataSource = db.GetDataTableDaws("SELECT idLinea, nomLinea FROM lineas WHERE [Planta] = " + planta + " ORDER BY nomLinea ASC");
@@ -35,7 +36,6 @@ namespace PDA
                 var listItem = ddl_type_report.Items.FindByText("");
                 listItem.Attributes["disabled"] = "disabled";
                 txtFrom.Text = DateTime.Now.ToString("yyyy-MM-dd");
-                txtTo.Text = DateTime.Now.ToString("yyyy-MM-dd");
             }
         }
 
@@ -57,9 +57,9 @@ namespace PDA
                 "  FROM[lines_management].[dbo].[lended_staff] A" +
                 "  INNER JOIN[lines_management].[dbo].[areas_lended] C" +
                 "  ON[A].[area] = [C].[IDX]" +
-                "  INNER JOIN[daws].[dbo].[headcount] D" +
+                "  LEFT JOIN[daws].[dbo].[headcount] D" +
                 "  ON[A].[NumEmpleado] = [D].[numero] COLLATE SQL_Latin1_General_CP1_CI_AS" +
-                "  WHERE [resultshift] = '" + ddl_shift.SelectedValue + "' AND [Plant] = " + Convert.ToInt32(planta) + " AND resultdateShift BETWEEN '" + txtFrom.Text + "' AND '" + txtTo.Text + "'" +
+                "  WHERE [resultshift] = '" + ddl_shift.SelectedValue + "' AND [Plant] = " + Convert.ToInt32(planta) + " AND resultdateShift = '" + txtFrom.Text + "'" +
                 "  ORDER BY [resultdateShift] ASC, [D].[linea] ASC, [area_name] ASC, [Turno] ASC ");
                     else
                         gv_prestados.DataSource = db.GetDataTable("SELECT A.[IDX],[NumEmpleado] as [Numero]" +
@@ -71,15 +71,15 @@ namespace PDA
                "  FROM[lines_management].[dbo].[lended_staff] A" +
                "  INNER JOIN[lines_management].[dbo].[areas_lended] C" +
                "  ON[A].[area] = [C].[IDX]" +
-               "  INNER JOIN [HeadCount].[dbo].[NDDHeadcount]  D" +
+               "  LEFT JOIN [HeadCount].[dbo].[NDDHeadcount]  D" +
                "  ON[A].[NumEmpleado] = [D].[Numreloj] COLLATE SQL_Latin1_General_CP1_CI_AS" +
-               "  WHERE [resultshift] = '" + ddl_shift.SelectedValue + "' AND [Plant] = " + Convert.ToInt32(planta) + " AND resultdateShift BETWEEN '" + txtFrom.Text + "' AND '" + txtTo.Text + "'" +
+               "  WHERE [resultshift] = '" + ddl_shift.SelectedValue + "' AND [Plant] = " + Convert.ToInt32(planta) + " AND resultdateShift = '" + txtFrom.Text + "'" +
                "  ORDER BY [resultdateShift] ASC, [D].[linea] ASC, [area_name] ASC, [Turno] ASC ");
                     gv_prestados.DataBind();
                     break;
                 case "200":
                     gv_report.Visible = true;
-                    gv_report.DataSource = db.SP_READ_PERSONAL_ESCANEADO(ddl_shift.SelectedItem.Text, Convert.ToInt32(planta), txtFrom.Text, txtTo.Text);
+                    gv_report.DataSource = db.SP_READ_PERSONAL_ESCANEADO(ddl_shift.SelectedItem.Text, Convert.ToInt32(planta), txtFrom.Text);
                     gv_report.DataBind();
                     break;
                 case "202":
@@ -89,7 +89,7 @@ namespace PDA
                         " ON A.idLinea = B.idLinea and B.Planta = " + Convert.ToInt32(planta) +
                         " LEFT JOIN [daws].[dbo].[Manning_Cantidad] C" +
                         " ON A.idLinea = C.idLinea" +
-                        " WHERE resultdate2 BETWEEN '" + txtFrom.Text + "' AND '" + txtTo.Text + "'" +
+                        " WHERE resultdate2 = '" + txtFrom.Text + "'" +
                         " AND resultshift = " + ddl_shift.SelectedValue +
                         " GROUP BY B.nomLinea, Qty" +
                         " ORDER BY B.nomLinea asc");
@@ -99,11 +99,47 @@ namespace PDA
                     string script = "ShowToast(3,'Solo disponible para descargar.');";
                     ClientScript.RegisterStartupScript(this.GetType(), "showError", script, true);
                     break;
+                case "204":
+                    gv_report.Visible = true;
+                    if (planta == "1")
+                        gv_report.DataSource = db.GetDataTableDaws("SELECT A.[numero]" +
+                            "      , UPPER(C.nombre) as 'Nombre'" +
+                            "      ,[nomLinea] AS 'Linea'" +
+                            "      ,[estacion]" +
+                            "      ,[tipo]" +
+                            "      ,[orden]" +
+                            "      ,[resultdate2] AS 'Fecha'" +
+                            "      ,[resultshift] AS 'Turno'" +
+                            "      ,[insert_date] AS 'Hora de escaneo'" +
+                            "  FROM [daws].[dbo].[attendance] A" +
+                            "  INNER JOIN [daws].[dbo].[lineas] B" +
+                            "  ON A.idLinea = B.idLinea" +
+                            "  LEFT JOIN [daws].[dbo].[headcount] C" +
+                            "  ON A.numero = C.numero" +
+                            "  WHERE resultdate2 BETWEEN '" + txtFrom.Text + "' AND '" + txtTo.Text + "' AND planta = 1 ORDER BY insert_date ASC");
+                    else
+                        gv_report.DataSource = db.GetDataTableDaws("SELECT A.[numero]" +
+                            "      , UPPER(C.[Nombre])  as 'Nombre'" +
+                            "      ,[nomLinea] AS 'Linea'" +
+                            "      ,[estacion]" +
+                            "      ,[tipo]" +
+                            "      ,[orden]" +
+                            "      ,[resultdate2] AS 'Fecha'" +
+                            "      ,[resultshift] AS 'Turno'" +
+                            "      ,[insert_date] AS 'Hora de escaneo'" +
+                            "  FROM [daws].[dbo].[attendance] A" +
+                            "  INNER JOIN [daws].[dbo].[lineas] B" +
+                            "  ON A.idLinea = B.idLinea" +
+                            "  LEFT JOIN [HeadCount].[dbo].[NDDHeadcount] C" +
+                            "  ON A.numero COLLATE Latin1_General_100_BIN2 = C.[Numreloj]" +
+                            "  WHERE resultdate2 BETWEEN '" + txtFrom.Text + "' AND '" + txtTo.Text + "' AND planta = 2 ORDER BY insert_date ASC");
+                    gv_report.DataBind();
+                    break;
                 default:
                     gv_report.Visible = true;
                     gv_report.DataSource = db.GetDataTableDaws("SELECT estacion, tipo, COUNT(numero) AS 'operadores' FROM  [daws].[dbo].[attendance]" +
                         " WHERE" +
-                        " resultdate2 BETWEEN '" + txtFrom.Text + "' AND '" + txtTo.Text + "'" +
+                        " resultdate2 = '" + txtFrom.Text + "'" +
                         " AND idLinea = '" + ddl_type_report.SelectedValue + "'" +
                         " AND resultshift = " + ddl_shift.SelectedValue +
                         " GROUP BY estacion, tipo, orden" +
@@ -125,8 +161,8 @@ namespace PDA
                 workSheet.Row(1).Height = 30;
                 workSheet.Row(1).Style.Font.Color.SetColor(ColorTranslator.FromHtml("#FFFFFF"));
                 workSheet.Row(2).Style.Font.Color.SetColor(ColorTranslator.FromHtml("#FFFFFF"));
-                workSheet.Cells["A1:G2"].Style.Fill.PatternType = ExcelFillStyle.Solid;
-                workSheet.Cells["A1:G2"].Style.Fill.BackgroundColor.SetColor(ColorTranslator.FromHtml("#002060"));
+                workSheet.Cells["A1:E2"].Style.Fill.PatternType = ExcelFillStyle.Solid;
+                workSheet.Cells["A1:E2"].Style.Fill.BackgroundColor.SetColor(ColorTranslator.FromHtml("#002060"));
                 workSheet.Row(1).Height = 30;
                 workSheet.Row(2).Height = 30;
 
@@ -136,17 +172,17 @@ namespace PDA
                     excelImage.SetPosition(0, 15, 0, 30);
                 }
 
-                workSheet.Cells["F1:G1"].Merge = true;
-                workSheet.Cells["F2:G2"].Merge = true;
+                workSheet.Cells["D1:E1"].Merge = true;
+                workSheet.Cells["D2:E2"].Merge = true;
 
-                workSheet.Cells[1, 5].Value = "FECHA CONSULTA";
-                workSheet.Cells[1, 6].Value = DateTime.Now.ToString("yyyy-MM-dd");
-                workSheet.Cells[2, 5].Value = "PLANTA";
-                workSheet.Cells[2, 6].Value = (Convert.ToInt32(planta) == 1) ? "DGO" : "NDD";
+                workSheet.Cells[1, 3].Value = "FECHA CONSULTA";
+                workSheet.Cells[1, 4].Value = DateTime.Now.ToString("yyyy-MM-dd");
+                workSheet.Cells[2, 3].Value = "PLANTA";
+                workSheet.Cells[2, 4].Value = (Convert.ToInt32(planta) == 1) ? "DGO" : "NDD";
 
-                workSheet.Cells["A4:G4"].Style.Fill.PatternType = ExcelFillStyle.Solid;
-                workSheet.Cells["A4:G4"].Style.Fill.BackgroundColor.SetColor(ColorTranslator.FromHtml("#002060"));
-                workSheet.Cells["A4:G4"].Style.Font.Color.SetColor(ColorTranslator.FromHtml("#FFFFFF"));
+                workSheet.Cells["A4:E4"].Style.Fill.PatternType = ExcelFillStyle.Solid;
+                workSheet.Cells["A4:E4"].Style.Fill.BackgroundColor.SetColor(ColorTranslator.FromHtml("#002060"));
+                workSheet.Cells["A4:E4"].Style.Font.Color.SetColor(ColorTranslator.FromHtml("#FFFFFF"));
 
                 if (planta == "1")
                     workSheet.Cells["A4"].LoadFromDataTable(db.GetDataTable("SELECT [NumEmpleado] as [Numero]" +
@@ -157,9 +193,9 @@ namespace PDA
                         "  FROM[lines_management].[dbo].[lended_staff] A" +
                         "  INNER JOIN[lines_management].[dbo].[areas_lended] C" +
                         "  ON[A].[area] = [C].[IDX]" +
-                        "  INNER JOIN[daws].[dbo].[headcount] D" +
+                        "  LEFT JOIN[daws].[dbo].[headcount] D" +
                         "  ON[A].[NumEmpleado] = [D].[numero] COLLATE SQL_Latin1_General_CP1_CI_AS" +
-                    "  WHERE [resultshift] = '" + ddl_shift.SelectedValue + "' AND [Plant] = " + Convert.ToInt32(planta) + " AND resultdateShift BETWEEN '" + txtFrom.Text + "' AND '" + txtTo.Text + "'" +
+                    "  WHERE [resultshift] = '" + ddl_shift.SelectedValue + "' AND [Plant] = " + Convert.ToInt32(planta) + " AND resultdateShift = '" + txtFrom.Text + "'" +
                         "  ORDER BY[resultdateShift]  ASC, [D].[linea] ASC, [area_name] ASC"), true);
                 else
                     workSheet.Cells["A4"].LoadFromDataTable(db.GetDataTable("SELECT [NumEmpleado] as [Numero]" +
@@ -170,9 +206,9 @@ namespace PDA
                     "  FROM[lines_management].[dbo].[lended_staff] A" +
                     "  INNER JOIN[lines_management].[dbo].[areas_lended] C" +
                     "  ON[A].[area] = [C].[IDX]" +
-                    "  INNER JOIN [HeadCount].[dbo].[NDDHeadcount] D" +
+                    "  LEFT JOIN [HeadCount].[dbo].[NDDHeadcount] D" +
                     "  ON[A].[NumEmpleado] = [D].[Numreloj] COLLATE SQL_Latin1_General_CP1_CI_AS" +
-                    "  WHERE [resultshift] = '" + ddl_shift.SelectedValue + "' AND [Plant] = " + Convert.ToInt32(planta) + " AND resultdateShift BETWEEN '" + txtFrom.Text + "' AND '" + txtTo.Text + "'" +
+                    "  WHERE [resultshift] = '" + ddl_shift.SelectedValue + "' AND [Plant] = " + Convert.ToInt32(planta) + " AND resultdateShift = '" + txtFrom.Text + "'" +
                     "  ORDER BY[resultdateShift]  ASC, [D].[linea] ASC, [area_name] ASC"), true);
 
 
@@ -232,7 +268,7 @@ namespace PDA
                 Response.AppendCookie(cookie);
                 Response.ContentType = "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet";
                 Response.ContentType = "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet";
-                Response.AddHeader("content-disposition", "attachment;filename=PERSONAL PRESTADO " + txtFrom.Text + "_TO_" + txtTo.Text + ".xlsx");
+                Response.AddHeader("content-disposition", "attachment;filename=PERSONAL PRESTADO " + txtFrom.Text + ".xlsx");
                 excel.SaveAs(memoryStream);
                 memoryStream.WriteTo(Response.OutputStream);
                 Response.Flush();
@@ -272,7 +308,7 @@ namespace PDA
                 workSheet.Cells["A4:F4"].Style.Font.Color.SetColor(ColorTranslator.FromHtml("#FFFFFF"));
 
 
-                workSheet.Cells["A4"].LoadFromDataTable(db.SP_READ_PERSONAL_ESCANEADO(ddl_shift.SelectedItem.Text, Convert.ToInt32(planta), txtFrom.Text, txtTo.Text), true);
+                workSheet.Cells["A4"].LoadFromDataTable(db.SP_READ_PERSONAL_ESCANEADO(ddl_shift.SelectedItem.Text, Convert.ToInt32(planta), txtFrom.Text), true);
 
                 for (int renglon = 5; renglon <= workSheet.Dimension.End.Row; renglon++)
                 {
@@ -317,7 +353,7 @@ namespace PDA
                 Response.AppendCookie(cookie);
                 Response.ContentType = "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet";
                 Response.ContentType = "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet";
-                Response.AddHeader("content-disposition", "attachment;filename=PERSONAL ESCANEADO (" + ddl_shift.SelectedItem.Text + ")  " + txtFrom.Text + "_TO_" + txtTo.Text + ".xlsx");
+                Response.AddHeader("content-disposition", "attachment;filename=PERSONAL ESCANEADO (" + ddl_shift.SelectedItem.Text + ")  " + txtFrom.Text + ".xlsx");
                 excel.SaveAs(memoryStream);
                 memoryStream.WriteTo(Response.OutputStream);
                 Response.Flush();
@@ -332,19 +368,13 @@ namespace PDA
 
                 //Pivote
                 var workSheet2 = excel.Workbook.Worksheets.Add("info");
-                //workSheet2.Cells["A1"].LoadFromDataTable(db.GetDataTable("SELECT [linea]" +
-                //    "      ,[fechaBusq]" +
-                //    "  FROM[daws].[dbo].[asistencia]" +
-                //    "  where fechaBusq BETWEEN '" + txtFrom.Text + "' AND '" + txtTo.Text + "' AND [turno] = '" + ddl_shift.SelectedItem.Text + "'"), true);
-
-
 
                 workSheet2.Cells["A1"].LoadFromDataTable(db.GetDataTable("SELECT [nomLinea] as linea" +
                     "      ,[resultdate] as FechaBusq" +
                     "  FROM [daws].[dbo].[attendance] a" +
                     "  INNER JOIN [daws].[dbo].[lineas] b" +
                     "  on a.idLinea = b.idLinea" +
-                    "  where [planta] = " + planta + " AND [resultdate2] BETWEEN '" + txtFrom.Text + "' AND '" + txtTo.Text + "' AND [resultshift] = " + ddl_shift.SelectedValue), true);
+                    "  where [planta] = " + planta + " AND [resultdate2] = '" + txtFrom.Text + "' AND [resultshift] = " + ddl_shift.SelectedValue), true);
 
                 workSheet2.Column(2).Style.Numberformat.Format = "yyyy-mm-dd";
 
@@ -373,12 +403,110 @@ namespace PDA
                 Response.AppendCookie(cookie);
                 Response.ContentType = "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet";
                 Response.ContentType = "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet";
-                Response.AddHeader("content-disposition", "attachment;filename=HISTORIAL DE ASISTENCIA" + txtFrom.Text + "_TO_" + txtTo.Text + ".xlsx");
+                Response.AddHeader("content-disposition", "attachment;filename=HISTORIAL DE ASISTENCIA" + txtFrom.Text + ".xlsx");
                 excel.SaveAs(memoryStream);
                 memoryStream.WriteTo(Response.OutputStream);
                 Response.Flush();
                 Response.End();
             }
+            else if (ddl_type_report.SelectedValue == "204")
+            {
+                //Reporte 
+
+                ExcelPackage excel = new ExcelPackage();
+                var workSheet = excel.Workbook.Worksheets.Add("Reporte");
+
+                workSheet.Row(1).Height = 30;
+                workSheet.Row(1).Style.Font.Color.SetColor(ColorTranslator.FromHtml("#FFFFFF"));
+                workSheet.Row(2).Style.Font.Color.SetColor(ColorTranslator.FromHtml("#FFFFFF"));
+                workSheet.Cells["A1:I2"].Style.Fill.PatternType = ExcelFillStyle.Solid;
+                workSheet.Cells["A1:I2"].Style.Fill.BackgroundColor.SetColor(ColorTranslator.FromHtml("#002060"));
+                workSheet.Row(1).Height = 30;
+                workSheet.Row(2).Height = 30;
+
+                using (System.Drawing.Image image = System.Drawing.Image.FromFile(HttpContext.Current.Server.MapPath("~/src/png/Logo.png")))
+                {
+                    var excelImage = workSheet.Drawings.AddPicture("Logo", image);
+                    excelImage.SetPosition(0, 15, 0, 30);
+                }
+
+                workSheet.Cells[1, 7].Value = "FECHA DESCARGA";
+                workSheet.Cells[1, 8].Value = DateTime.Now.ToString("yyyy-MM-dd");
+                workSheet.Cells[2, 7].Value = "PLANTA";
+                workSheet.Cells[2, 8].Value = (Convert.ToInt32(planta) == 1) ? "DGO" : "NDD";
+
+                workSheet.Cells["A4:I4"].Style.Fill.PatternType = ExcelFillStyle.Solid;
+                workSheet.Cells["A4:I4"].Style.Fill.BackgroundColor.SetColor(ColorTranslator.FromHtml("#002060"));
+                workSheet.Cells["A4:I4"].Style.Font.Color.SetColor(ColorTranslator.FromHtml("#FFFFFF"));
+
+
+                if (planta == "1")
+                    workSheet.Cells["A4"].LoadFromDataTable(db.GetDataTableDaws("SELECT A.[numero]" +
+                                "      , UPPER(C.nombre) as 'Nombre'" +
+                                "      ,[nomLinea] AS 'Linea'" +
+                                "      ,[estacion]" +
+                                "      ,[tipo]" +
+                                "      ,[orden]" +
+                                "      ,[resultdate2] AS 'Fecha'" +
+                                "      ,[resultshift] AS 'Turno'" +
+                                "      ,[insert_date] AS 'Hora de escaneo'" +
+                                "  FROM [daws].[dbo].[attendance] A" +
+                                "  INNER JOIN [daws].[dbo].[lineas] B" +
+                                "  ON A.idLinea = B.idLinea" +
+                                "  LEFT JOIN [daws].[dbo].[headcount] C" +
+                                "  ON A.numero = C.numero" +
+                                "  WHERE resultdate2 BETWEEN '" + txtFrom.Text + "' AND '" + txtTo.Text + "' AND planta = 1 ORDER BY insert_date ASC"), true);
+                else
+                    workSheet.Cells["A4"].LoadFromDataTable(db.GetDataTableDaws("SELECT A.[numero]" +
+                            "      , UPPER(C.[Nombre])  as 'Nombre'" +
+                            "      ,[nomLinea] AS 'Linea'" +
+                            "      ,[estacion]" +
+                            "      ,[tipo]" +
+                            "      ,[orden]" +
+                            "      ,[resultdate2] AS 'Fecha'" +
+                            "      ,[resultshift] AS 'Turno'" +
+                            "      ,[insert_date] AS 'Hora de escaneo'" +
+                            "  FROM [daws].[dbo].[attendance] A" +
+                            "  INNER JOIN [daws].[dbo].[lineas] B" +
+                            "  ON A.idLinea = B.idLinea" +
+                            "  LEFT JOIN [HeadCount].[dbo].[NDDHeadcount] C" +
+                            "  ON A.numero COLLATE Latin1_General_100_BIN2 = C.[Numreloj]" +
+                            "  WHERE resultdate2 BETWEEN '" + txtFrom.Text + "' AND '" + txtTo.Text + "' AND planta = 2 ORDER BY insert_date ASC"), true);
+
+               
+
+                ExcelRange rg = workSheet.Cells[4, 1, workSheet.Dimension.End.Row, workSheet.Dimension.End.Column];
+                string tableName = "Table1";
+                ExcelTable tab = workSheet.Tables.Add(rg, tableName);
+                tab.TableStyle = TableStyles.Medium16;
+                workSheet.View.ZoomScale = 75;
+                workSheet.Row(1).Style.VerticalAlignment = ExcelVerticalAlignment.Center;
+                workSheet.Row(2).Style.VerticalAlignment = ExcelVerticalAlignment.Center;
+                workSheet.Row(4).Style.VerticalAlignment = ExcelVerticalAlignment.Center;
+
+                workSheet.Column(9).Style.Numberformat.Format = "yyyy-mm-dd hh:mm";
+
+                workSheet.View.ShowGridLines = false;
+                var allCells = workSheet.Cells[1, 1, workSheet.Dimension.End.Row, workSheet.Dimension.End.Column];
+                var cellFont = allCells.Style.Font;
+                cellFont.SetFromFont(new Font("Arial", 12));
+                workSheet.Cells[workSheet.Dimension.Address].AutoFitColumns();
+
+
+                MemoryStream memoryStream = new MemoryStream();
+                HttpCookie cookie = new HttpCookie("generateFlag");
+                cookie.Value = "Flag";
+                cookie.Expires = DateTime.Now.AddDays(1);
+                Response.AppendCookie(cookie);
+                Response.ContentType = "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet";
+                Response.AddHeader("content-disposition", "attachment;filename=BASE DE DATOS " + txtFrom.Text + "_TO_" + txtTo.Text + ".xlsx");
+                excel.SaveAs(memoryStream);
+                memoryStream.WriteTo(Response.OutputStream);
+                Response.Flush();
+                Response.End();
+            }
+
+
             else if (Convert.ToInt32(ddl_type_report.SelectedValue) < 199)
             {
                 //Reporte 
@@ -425,8 +553,7 @@ namespace PDA
                 workSheet2.Row(1).Height = 30;
 
 
-                workSheet2.Cells["A1"].LoadFromDataTable(db.SP_READ_PERSONAL_POR_LINEA(ddl_type_report.SelectedValue, txtFrom.Text, ddl_shift.SelectedValue), true);
-
+                workSheet2.Cells["A1"].LoadFromDataTable(db.SP_READ_PERSONAL_POR_LINEA(ddl_type_report.SelectedValue, txtFrom.Text, ddl_shift.SelectedValue,planta), true);
 
 
                 ExcelRange rg2 = workSheet2.Cells[1, 1, workSheet2.Dimension.End.Row, workSheet2.Dimension.End.Column];
@@ -486,7 +613,7 @@ namespace PDA
                 cookie.Expires = DateTime.Now.AddDays(1);
                 Response.AppendCookie(cookie);
                 Response.ContentType = "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet";
-                Response.AddHeader("content-disposition", "attachment;filename= " + ddl_type_report.SelectedItem.Text + "  (" + ddl_shift.SelectedItem.Text + ")  " + txtFrom.Text + "_TO_" + txtTo.Text + ".xlsx");
+                Response.AddHeader("content-disposition", "attachment;filename= " + ddl_type_report.SelectedItem.Text + "  (" + ddl_shift.SelectedItem.Text + ")  " + txtFrom.Text + ".xlsx");
                 excel.SaveAs(memoryStream);
                 memoryStream.WriteTo(Response.OutputStream);
                 Response.Flush();
@@ -511,9 +638,9 @@ namespace PDA
             "  FROM[lines_management].[dbo].[lended_staff] A" +
             "  INNER JOIN[lines_management].[dbo].[areas_lended] C" +
             "  ON[A].[area] = [C].[IDX]" +
-            "  INNER JOIN[daws].[dbo].[headcount] D" +
+            "  LEFT JOIN[daws].[dbo].[headcount] D" +
             "  ON[A].[NumEmpleado] = [D].[numero] COLLATE SQL_Latin1_General_CP1_CI_AS" +
-            "  WHERE [resultshift] = '" + ddl_shift.SelectedValue + "' AND [Plant] = " + Convert.ToInt32(planta) + " AND resultdateShift BETWEEN '" + txtFrom.Text + "' AND '" + txtTo.Text + "'" +
+            "  WHERE [resultshift] = '" + ddl_shift.SelectedValue + "' AND [Plant] = " + Convert.ToInt32(planta) + " AND resultdateShift = '" + txtFrom.Text + "'" +
             "  ORDER BY [resultdateShift] ASC, [D].[linea] ASC, [area_name] ASC, [Turno] ASC ");
                 gv_prestados.DataBind();
                 string script = "ShowToast(1,'Empleado eliminado.');";

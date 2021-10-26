@@ -31,6 +31,7 @@
                             <asp:DropDownList ID="ddl_shift" runat="server" CssClass="form-select">
                                 <asp:ListItem Text="Primero" Selected="True" Value="1"></asp:ListItem>
                                 <asp:ListItem Text="Segundo" Value="2"></asp:ListItem>
+                                <asp:ListItem Text="Tercero" Value="3"></asp:ListItem>
                             </asp:DropDownList>
                         </div>
                         <div class="p-2 me-auto">

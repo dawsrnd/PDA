@@ -47,6 +47,11 @@ namespace PDA
             }
             txtboxEmpleado.Text = "";
             lblTotal.Text = db.SP_GET_TOTAL_LENDED(planta);
+            lblShift.Text = db.GetStringDaws("(SELECT CASE WHEN  CAST(GETDATE() AS TIME)  BETWEEN '07:00:00' AND '16:40:00' THEN 'TURNO A' " +
+                        "							WHEN  CAST(GETDATE() AS TIME)  BETWEEN '16:40:00' AND '23:59:59' THEN 'TURNO B'" +
+                        "							WHEN  CAST(GETDATE() AS TIME)  BETWEEN '00:00:00' AND '01:20:00' THEN 'TURNO B' " +
+                        "							WHEN  CAST(GETDATE() AS TIME)  BETWEEN '01:20:00' AND '07:00:00' THEN 'TURNO C'" +
+                        "						END)");
             txtboxEmpleado.Focus();
         }
 

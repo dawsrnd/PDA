@@ -5,14 +5,14 @@ https://go.microsoft.com/fwlink/?LinkID=208121.
 <Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <PropertyGroup>
     <_PublishTargetUrl>C:\Users\R&amp;D Program\source\repos\PDA\PDA\bin\app.publish\</_PublishTargetUrl>
-    <History>True|2021-10-21T13:35:02.2413858Z;True|2021-10-19T08:18:40.4981165-05:00;True|2021-10-19T08:17:39.7137553-05:00;True|2021-10-19T07:23:54.7855247-05:00;True|2021-10-18T09:50:12.8932096-05:00;True|2021-10-18T09:49:26.2269521-05:00;True|2021-10-18T09:42:41.7613564-05:00;True|2021-10-18T08:05:52.0084263-05:00;True|2021-10-17T14:01:47.2839020-05:00;True|2021-10-15T12:02:42.1315915-05:00;True|2021-10-13T14:38:38.6351499-05:00;True|2021-10-04T15:12:55.4446820-05:00;True|2021-10-04T15:08:33.4212758-05:00;True|2021-10-04T15:02:55.0003118-05:00;True|2021-10-04T14:19:23.6311868-05:00;</History>
+    <History>True|2021-10-26T17:06:15.2055843Z;True|2021-10-26T10:52:12.6603888-05:00;True|2021-10-26T09:23:46.6464934-05:00;True|2021-10-21T08:35:02.2413858-05:00;True|2021-10-19T08:18:40.4981165-05:00;True|2021-10-19T08:17:39.7137553-05:00;True|2021-10-19T07:23:54.7855247-05:00;True|2021-10-18T09:50:12.8932096-05:00;True|2021-10-18T09:49:26.2269521-05:00;True|2021-10-18T09:42:41.7613564-05:00;True|2021-10-18T08:05:52.0084263-05:00;True|2021-10-17T14:01:47.2839020-05:00;True|2021-10-15T12:02:42.1315915-05:00;True|2021-10-13T14:38:38.6351499-05:00;True|2021-10-04T15:12:55.4446820-05:00;True|2021-10-04T15:08:33.4212758-05:00;True|2021-10-04T15:02:55.0003118-05:00;True|2021-10-04T14:19:23.6311868-05:00;</History>
   </PropertyGroup>
   <ItemGroup>
     <File Include="bin/database.dll">
-      <publishTime>10/15/2021 11:33:35</publishTime>
+      <publishTime>10/26/2021 12:01:17</publishTime>
     </File>
     <File Include="bin/database.pdb">
-      <publishTime>10/15/2021 11:33:35</publishTime>
+      <publishTime>10/26/2021 12:01:17</publishTime>
     </File>
     <File Include="bin/EPPlus.dll">
       <publishTime>09/21/2021 06:06:12</publishTime>
@@ -24,10 +24,10 @@ https://go.microsoft.com/fwlink/?LinkID=208121.
       <publishTime>03/10/2021 23:48:48</publishTime>
     </File>
     <File Include="bin/PDA.dll">
-      <publishTime>10/21/2021 08:34:59</publishTime>
+      <publishTime>10/26/2021 12:06:14</publishTime>
     </File>
     <File Include="bin/PDA.pdb">
-      <publishTime>10/21/2021 08:34:59</publishTime>
+      <publishTime>10/26/2021 12:06:14</publishTime>
     </File>
     <File Include="bin/roslyn/csc.exe">
       <publishTime>08/08/2018 05:38:48</publishTime>
@@ -234,19 +234,19 @@ https://go.microsoft.com/fwlink/?LinkID=208121.
       <publishTime>10/04/2021 11:55:51</publishTime>
     </File>
     <File Include="Reportes/PerLine.aspx">
-      <publishTime>10/15/2021 10:53:19</publishTime>
+      <publishTime>10/26/2021 12:05:08</publishTime>
     </File>
     <File Include="Reportes/PerOperator.aspx">
       <publishTime>10/13/2021 14:33:22</publishTime>
     </File>
     <File Include="Reportes/PerStation.aspx">
-      <publishTime>10/13/2021 14:35:11</publishTime>
+      <publishTime>10/25/2021 07:45:06</publishTime>
     </File>
     <File Include="Scan.aspx">
       <publishTime>10/18/2021 07:23:58</publishTime>
     </File>
     <File Include="Site.Master">
-      <publishTime>10/13/2021 14:34:10</publishTime>
+      <publishTime>10/26/2021 08:13:49</publishTime>
     </File>
     <File Include="src/cc.txt">
       <publishTime>10/04/2021 15:12:21</publishTime>
@@ -264,7 +264,7 @@ https://go.microsoft.com/fwlink/?LinkID=208121.
       <publishTime>09/30/2021 14:59:20</publishTime>
     </File>
     <File Include="Web.config">
-      <publishTime>10/18/2021 09:49:25</publishTime>
+      <publishTime>10/26/2021 10:52:12</publishTime>
     </File>
   </ItemGroup>
 </Project>

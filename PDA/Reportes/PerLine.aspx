@@ -60,6 +60,7 @@
                             <asp:DropDownList ID="ddl_shift" runat="server" CssClass="form-select">
                                 <asp:ListItem Text="Primero" Selected="True" Value="1"></asp:ListItem>
                                 <asp:ListItem Text="Segundo" Value="2"></asp:ListItem>
+                                <asp:ListItem Text="Tercero" Value="3"></asp:ListItem>
                             </asp:DropDownList>
                         </div>
                         <div class="p-2 me-auto">
@@ -95,7 +96,7 @@
                                                     <asp:BoundField ItemStyle-Width="10%" ItemStyle-HorizontalAlign="Left" NullDisplayText=" " ReadOnly="true" ItemStyle-Wrap="false" DataField="Turno" HeaderText="Turno" />
                                                     <asp:TemplateField ItemStyle-Width="5%" ItemStyle-HorizontalAlign="Center" ItemStyle-Wrap="false" HeaderText="Opciones">
                                                         <ItemTemplate>
-                                                            <asp:LinkButton ID="btnDelete" runat="server" CommandArgument='<%#Eval("IDX")%>' OnCommand="btnDelete_Command"  OnClientClick="Confirm('Desea eliminar al empleado?');" >
+                                                            <asp:LinkButton ID="btnDelete" runat="server" CommandArgument='<%#Eval("IDX")%>' OnCommand="btnDelete_Command" OnClientClick="Confirm('Desea eliminar al empleado?');">
                                                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" class="bi bi-trash text-danger" viewBox="0 0 16 16">
                                                                   <path d="M5.5 5.5A.5.5 0 0 1 6 6v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5zm2.5 0a.5.5 0 0 1 .5.5v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5zm3 .5a.5.5 0 0 0-1 0v6a.5.5 0 0 0 1 0V6z"/>
                                                                   <path fill-rule="evenodd" d="M14.5 3a1 1 0 0 1-1 1H13v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V4h-.5a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1H6a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1h3.5a1 1 0 0 1 1 1v1zM4.118 4 4 4.059V13a1 1 0 0 0 1 1h6a1 1 0 0 0 1-1V4.059L11.882 4H4.118zM2.5 3V2h11v1h-11z"/>
@@ -146,6 +147,32 @@
     <script type="text/javascript" src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
     <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mdb-ui-kit/3.6.0/mdb.min.js"></script>
     <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>
+
     <script src='<%= ResolveUrl("~/js/functions.js") %>'></script>
     <script src='<%= ResolveUrl("~/js/modalLoading.js") %>'></script>
+    <script>
+        //VARIABLES
+        var txtTo = document.getElementById('ContentPlaceHolder1_txtTo');
+        var ddl_shift = document.getElementById('ContentPlaceHolder1_ddl_shift');
+        var ddl_type_report = document.getElementById('ContentPlaceHolder1_ddl_type_report');
+        EnableOrDisable();
+
+        //ONITEM CHANGE SELECT
+        ddl_type_report.addEventListener('change', function () {
+            EnableOrDisable();
+        });
+
+
+        function EnableOrDisable() {
+            if (ddl_type_report.value == 204) {
+                txtTo.disabled = false;
+                ddl_shift.disabled = true;
+            }
+            else {
+                txtTo.disabled = true;
+                txtTo.value = '';
+                ddl_shift.disabled = false;
+            }
+        }
+    </script>
 </asp:Content>
